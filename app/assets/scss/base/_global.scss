@@ -1,0 +1,61 @@
+/// --------------------------------------------------
+/// base/_global.scss
+/// --------------------------------------------------
+/// Global styles applied across the project: base typography
+/// and default element styles that the reset does not cover.
+/// --------------------------------------------------
+
+@use "../abstracts" as *;
+
+* {
+   font-family: "Noto Sans", sans-serif;
+   font-optical-sizing: auto;
+   font-style: normal;
+   font-variation-settings: "wdth" 100;
+   font-weight: 500;
+}
+
+body {
+   background: var(--color-surface);
+   color: var(--color-ink);
+}
+
+h1 {
+   font-size: px-to-rem(28);
+   font-weight: 700;
+   margin-bottom: px-to-rem(8);
+
+   @include web-screen {
+      font-size: px-to-rem(32);
+      margin-bottom: px-to-rem(12);
+   }
+}
+
+h2 {
+   font-size: px-to-rem(24);
+   font-weight: 600;
+   margin-bottom: px-to-rem(8);
+
+   @include web-screen {
+      font-size: px-to-rem(28);
+      margin-bottom: px-to-rem(12);
+   }
+}
+
+strong {
+   font-weight: 600;
+}
+
+.page {
+   display: flex;
+   flex-direction: column;
+   gap: px-to-rem(24);
+   width: 100%;
+   max-width: px-to-rem(996);
+   margin: 0 auto px-to-rem(48);
+   padding: px-to-rem(32);
+
+   @include mobile {
+      padding: px-to-rem(12);
+   }
+}

@@ -1,0 +1,70 @@
+@use "sass:meta";
+@use "sass:math";
+
+/// --------------------------------------------------
+/// abstracts/_functions.scss
+/// --------------------------------------------------
+/// Custom SCSS functions reused throughout the project.
+/// Mirrors devanilayam_web so both codebases share the same
+/// authoring vocabulary.
+/// --------------------------------------------------
+
+// Validates $size and $context values for px-to-rem()
+/// @access private
+/// @param {Number} $size - Must be a number and unitless
+/// @param {Number} $context - Must be a number, unitless, and not zero
+@function validate-size-and-context($size, $context) {
+   @if meta.type-of($size) != "number" {
+      @error "rem($size, $context): $size must be a number. Received: #{meta.type-of($size)}";
+   }
+
+   @if meta.type-of($context) != "number" {
+      @error "rem($size, $context): $context must be a number. Received: #{meta.type-of($context)}";
+   }
+
+   @if $context == 0 {
+      @error "rem($size, $context): $context cannot be zero.";
+   }
+
+   @if not math.is-unitless($size) {
+      @error "rem($size, $context): $size must be unitless. Received: #{$size}";
+   }
+
+   @if not math.is-unitless($context) {
+      @error "rem($size, $context): $context must be unitless. Received: #{$context}";
+   }
+
+   @return true;
+}
+
+/// Converts a pixel value to rem units based on a given context (default: 16).
+///
+/// @param {Number} $size - The pixel value to convert (must be unitless).
+/// @param {Number} $context - The base pixel context for conversion (must be unitless, default: 16).
+/// @return {Number} - The value in rem units.
+///
+/// @example
+///   px-to-rem(32)         // returns 2rem
+///   px-to-rem(24, 12)     // returns 2rem
+@function px-to-rem($size, $context: 16) {
+
+   $valid: validate-size-and-context($size, $context);
+
+   @return math.div($size, $context) * 1rem;
+}
+
+/// Converts a pixel value to em units based on a given context (default: 16).
+///
+/// @param {Number} $size - The pixel value to convert (must be unitless).
+/// @param {Number} $context - The base pixel context for conversion (must be unitless, default: 16).
+/// @return {Number} - The value in em units.
+///
+/// @example
+///   px-to-em(32)         // returns 2em
+///   px-to-em(24, 12)     // returns 2em
+@function px-to-em($size, $context: 16) {
+
+   $valid: validate-size-and-context($size, $context);
+
+   @return math.div($size, $context) * 1em;
+}

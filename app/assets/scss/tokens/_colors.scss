@@ -1,0 +1,20 @@
+/// --------------------------------------------------
+/// tokens/_colors.scss
+/// --------------------------------------------------
+/// The Devanilayam palette, exposed as CSS custom properties so
+/// components can theme without importing SCSS.
+/// --------------------------------------------------
+
+:root {
+   // Brand
+   --color-brand: #EB730C;
+   --color-brand-deep: #854D0E;
+
+   // Surfaces
+   --color-surface: #FAF8F3;
+
+   // Ink
+   --color-ink: #2D2A23;
+   --color-ink-muted: rgb(45 42 35 / 70%);
+   --color-border: rgb(45 42 35 / 12%);
+}

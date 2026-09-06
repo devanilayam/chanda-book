@@ -1,0 +1,29 @@
+{
+	"name": "chanda-book",
+	"version": "0.1.0",
+	"type": "module",
+	"private": true,
+	"engines": {
+		"node": ">=24",
+		"bun": ">=1.2"
+	},
+	"scripts": {
+		"build": "bun --bun nuxt build",
+		"dev": "bun --bun nuxt dev",
+		"generate": "bun --bun nuxt generate",
+		"preview": "nuxt preview",
+		"postinstall": "bun --bun nuxt prepare",
+		"typecheck": "vue-tsc --noEmit"
+	},
+	"dependencies": {
+		"@nuxt/fonts": "^0.14.0",
+		"nuxt": "^4.5.2",
+		"vue": "^3.5.41",
+		"vue-router": "^5.2.0"
+	},
+	"devDependencies": {
+		"sass-embedded": "^1.103.1",
+		"typescript": "^6.0.3",
+		"vue-tsc": "^3.3.11"
+	}
+}
