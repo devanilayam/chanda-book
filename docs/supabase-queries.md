@@ -57,10 +57,10 @@ Notes on the choices:
 - `communities` carries only the three columns specified. Add
   `created_at timestamptz not null default now()` if you want audit ordering.
 
-## 2. Create a profile on signup
+## 2. Create a profile on first sign-in
 
 Signup happens inside Supabase's auth schema, so the profile row is created by
-a trigger rather than by the app. This means feature 1 (signup) needs no
+a trigger rather than by the app. This means feature 1 (sign-in) needs no
 database call from the client at all — `supabase.auth.signUp({ email,
 password })` is enough, and the profile appears on its own.
 
@@ -247,6 +247,29 @@ where id = auth.uid();
 -- Should fail — communities has no insert policy for authenticated users.
 insert into public.communities (name, address) values ('Nope', 'Nowhere');
 ```
+
+## Google sign-in (dashboard, not SQL)
+
+Google is the app's only sign-in method — there is no email-and-password form,
+and `/login` is the single door. Nothing in the schema changes: Supabase writes
+the same row to `auth.users` on a first sign-in, so `on_auth_user_created`
+creates the profile and the community gate behaves as described above. Email
+and password can stay disabled in the dashboard.
+
+Two things have to be set up outside this file:
+
+1. **Google Cloud console** — create an OAuth 2.0 Web application client, and
+   give it the authorised redirect URI Supabase shows on the provider page:
+   `https://<project-ref>.supabase.co/auth/v1/callback`. Note the client ID and
+   secret.
+2. **Supabase dashboard** — Authentication → Sign In / Providers → Google:
+   enable it and paste that client ID and secret. Until this is done the button
+   fails with `Unsupported provider: provider is not enabled`.
+
+Then, under Authentication → URL Configuration, add the app's own callback to
+the redirect allow list — `http://localhost:3000/confirm` for development, plus
+the deployed origin's `/confirm`. That is the URL `useGoogleAuth` asks Google to
+return to, and Supabase refuses any redirect target not on the list.
 
 ## Changing a user's community anyway
 

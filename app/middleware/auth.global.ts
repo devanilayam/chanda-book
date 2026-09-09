@@ -10,11 +10,15 @@
  * whole decision.
  */
 
-/** Reachable without signing in. `/` doubles as the signed-out landing page. */
-const PUBLIC_ROUTES = ["/", "/login", "/signup"];
+/**
+ * Reachable without signing in. `/` doubles as the signed-out landing page,
+ * and `/confirm` has to be open because an OAuth redirect lands there before
+ * the session exists — or, when the user backs out at Google, instead of one.
+ */
+const PUBLIC_ROUTES = ["/", "/login", "/confirm"];
 
 /** Pointless to visit once you have a session. */
-const GUEST_ONLY_ROUTES = ["/login", "/signup"];
+const GUEST_ONLY_ROUTES = ["/login"];
 
 const SELECT_COMMUNITY = "/select-community";
 

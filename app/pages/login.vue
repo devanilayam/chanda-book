@@ -3,51 +3,29 @@
       <logo :height="56" orientation="vertical" />
 
       <auth-form
-         heading="Welcome back"
-         description="Log in to see your community."
-         submit-label="Log in"
+         heading="Welcome to Chandabook"
+         description="Sign in with Google to see your community. New accounts are created on the first sign-in."
          :pending="pending"
          :error-message="errorMessage"
-         @submit="onLogIn"
-      >
-         <template #footer>
-            New to Chandabook?
-            <nuxt-link to="/signup">Create an account</nuxt-link>
-         </template>
-      </auth-form>
+         @google="signInWithGoogle"
+      />
    </main>
 </template>
 
 <script setup lang="ts">
-import type { AuthFormSubmitPayload } from "~/components/AuthForm/types";
-
 useSeoMeta({
-   title: "Log in",
-   description: "Log in to Chandabook.",
+   title: "Sign in",
+   description: "Sign in to Chandabook.",
 });
 
-const client = useSupabaseClient();
-const { reset } = useMyCommunity();
-
-const pending = ref(false);
-const errorMessage = ref<string | null>(null);
-
-async function onLogIn({ email, password }: AuthFormSubmitPayload) {
-   pending.value = true;
-   errorMessage.value = null;
-
-   const { error } = await client.auth.signInWithPassword({ email, password });
-
-   if (error) {
-      errorMessage.value = error.message;
-      pending.value = false;
-      return;
-   }
-
-   // Drop anything cached for a previously signed-in user before the
-   // middleware decides where this one belongs.
-   reset();
-
-   await navigateTo("/");
-}
+const { pending, errorMessage, signInWithGoogle } = useGoogleAuth();
 </script>
+
+<style lang="scss">
+.auth-page {
+   flex: 1;
+   align-items: center;
+   justify-content: center;
+   padding-block: px-to-rem(48);
+}
+</style>

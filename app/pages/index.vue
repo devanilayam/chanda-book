@@ -23,8 +23,7 @@
          <p>A Devanilayam project.</p>
 
          <div class="home__actions">
-            <nuxt-link to="/signup" class="home__action home__action--primary">Sign up</nuxt-link>
-            <nuxt-link to="/login" class="home__action">Log in</nuxt-link>
+            <nuxt-link to="/login" class="home__action home__action--primary">Sign in</nuxt-link>
          </div>
       </template>
    </main>
