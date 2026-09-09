@@ -28,25 +28,21 @@ useSeoMeta({
 
 const client = useSupabaseClient();
 const { reset } = useMyCommunity();
+const { message: redirectError } = useAuthRedirectError();
 
-const errorMessage = ref<string | null>(null);
+const sessionError = ref<string | null>(null);
+
+const errorMessage = computed(() => redirectError.value ?? sessionError.value);
 
 onMounted(async () => {
-   // Google reports a refusal in the query string rather than by failing the
-   // redirect, so read that before asking about the session.
-   const { error: oauthError, error_description: description } = useRoute().query;
-
-   if (oauthError) {
-      errorMessage.value = typeof description === "string"
-         ? description
-         : "Google sign-in was cancelled.";
-      return;
-   }
+   // A refusal arrives in the query string rather than as a failed redirect,
+   // so when one is already there, there is no code left to exchange.
+   if (redirectError.value) return;
 
    const { data, error } = await client.auth.getSession();
 
    if (error || !data.session) {
-      errorMessage.value = error?.message ?? "We could not complete the sign-in. Please try again.";
+      sessionError.value = error?.message ?? "We could not complete the sign-in. Please try again.";
       return;
    }
 
