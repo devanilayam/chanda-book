@@ -9,12 +9,19 @@
    // Brand
    --color-brand: #EB730C;
    --color-brand-deep: #854D0E;
+   --color-brand-soft: rgb(235 115 12 / 8%);
+   --color-on-brand: #FFF;
 
    // Surfaces
    --color-surface: #FAF8F3;
+   --color-surface-raised: #FFF;
 
    // Ink
    --color-ink: #2D2A23;
    --color-ink-muted: rgb(45 42 35 / 70%);
    --color-border: rgb(45 42 35 / 12%);
+
+   // Feedback
+   --color-danger: #9F1239;
+   --color-danger-soft: rgb(159 18 57 / 8%);
 }

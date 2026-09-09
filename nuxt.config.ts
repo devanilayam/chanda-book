@@ -7,7 +7,7 @@ const SITE_DESCRIPTION = "Chandabook — a Devanilayam project.";
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
    compatibilityDate: "2025-07-15",
-   modules: ["@nuxt/fonts"],
+   modules: ["@nuxt/fonts", "@nuxtjs/supabase"],
 
    ssr: true,
 
@@ -31,6 +31,14 @@ export default defineNuxtConfig({
             fallbacks: ["system-ui", "-apple-system", "Segoe UI", "sans-serif"],
          },
       ],
+   },
+
+   supabase: {
+      // The module's own redirect middleware can't express the community gate
+      // ("signed in but hasn't chosen yet"), and it would also lock visitors
+      // out of `/`, which is the public landing page. `app/middleware/
+      // auth.global.ts` owns every routing decision instead.
+      redirect: false,
    },
 
    app: {
