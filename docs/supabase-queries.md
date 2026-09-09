@@ -61,8 +61,8 @@ Notes on the choices:
 
 Signup happens inside Supabase's auth schema, so the profile row is created by
 a trigger rather than by the app. This means feature 1 (sign-in) needs no
-database call from the client at all — `supabase.auth.signUp({ email,
-password })` is enough, and the profile appears on its own.
+database call from the client at all — `supabase.auth.signInWithOAuth({
+provider: 'google' })` is enough, and the profile appears on its own.
 
 ```sql
 create or replace function public.handle_new_user()
@@ -78,6 +78,12 @@ begin
    return new;
 end;
 $$;
+
+-- Postgres grants execute to PUBLIC on every new function. A security definer
+-- function runs as its owner, so leave that grant in place and any client can
+-- call it. The trigger below does not need it: permission is checked when the
+-- trigger is created, not each time it fires.
+revoke execute on function public.handle_new_user() from public, anon, authenticated;
 
 drop trigger if exists on_auth_user_created on auth.users;
 
@@ -104,6 +110,7 @@ panel — not just the client.
 create or replace function public.enforce_community_immutable()
 returns trigger
 language plpgsql
+set search_path = ''      -- nothing here is resolved by name, but pin it anyway
 as $$
 begin
    -- Null -> value is the one allowed transition. Value -> anything else
