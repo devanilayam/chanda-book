@@ -2,6 +2,13 @@
    <main class="page home">
       <logo :height="64" orientation="vertical" />
 
+      <!-- A sign-in that dies before Supabase can trust the `state` lands here
+           instead of on `/confirm`, so the failure has to be readable from the
+           home page too or it looks like the button simply did nothing. -->
+      <p v-if="authError" class="home__error" role="alert">
+         {{ authError }}
+      </p>
+
       <template v-if="user">
          <template v-if="community">
             <p class="home__eyebrow">Your community</p>
@@ -38,6 +45,7 @@ useSeoMeta({
 const client = useSupabaseClient();
 const user = useSupabaseUser();
 const { community, reset } = useMyCommunity();
+const { message: authError } = useAuthRedirectError();
 
 async function onSignOut() {
    await client.auth.signOut();
@@ -56,6 +64,17 @@ async function onSignOut() {
 
    p {
       color: var(--color-ink-muted);
+   }
+
+   // `.home p` above claims every paragraph for the muted body colour, so this
+   // needs the element in the selector to win it back.
+   p#{&}__error {
+      max-width: px-to-rem(420);
+      padding: px-to-rem(12) px-to-rem(16);
+
+      color: var(--color-danger);
+      background: var(--color-danger-soft);
+      border-radius: px-to-rem(8);
    }
 
    &__eyebrow {
